@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admit Patient</title>
+    <style>
+        .messagebox {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Admit Patient</h1>
+    <form id="admitForm" method="POST">
+        <label for="patient_id">Patient ID:</label>
+        <input type="text" id="patient_id" name="patient_id" required><br><br>
+
+        <label for="date_in">Check-in Date:</label>
+        <input type="date" id="date_in" name="date_in" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Div to show messages from the PHP script -->
+    <div id="message"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // giving default value as system date to date input
+        const today = new Date(); //system date
+        date_val = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        document.getElementById("date_in").value = date_val;
+
+
+        
+        // Prevent form from submitting in the traditional way
+        $('#admitForm').on('submit', function (e) {
+            e.preventDefault(); // Stop form from refreshing the page
+
+            // Send the form data to the PHP script via AJAX
+            $.ajax({
+                url: 'a.php', // Replace with the path to your PHP script
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    $('#message').html(response); // Display the PHP response
+                },
+                error: function () {
+                    $('#message').html("Error: Could not submit form.");
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
